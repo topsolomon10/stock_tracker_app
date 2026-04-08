@@ -1,15 +1,14 @@
-from symtable import Symbol
 import streamlit as st
 import yfinance as yf
 import pandas as pd
 from difflib import get_close_matches
 from streamlit_autorefresh import st_autorefresh
 
-
+st.set_page_config(page_title="Stock Market Price Tracker", page_icon="📈")
 st.title("Stock Market Price Tracker")
 st.write("Welcome! Enter a stock symbol to get started")
 
-st_autorefresh(interval=5000, key="datarefresh")
+st_autorefresh(interval=30000, key="datarefresh")
 
 
 valid_symbols = ["AAPL", "TSLA", "MSFT", "GOOGL", "AMZN", "NFLX", "META", "NVDA", "JPM", "V"]
@@ -32,11 +31,11 @@ if stock_symbol:
         price = data["Close"].iloc[-1]
         st.success(f"Current Price of {stock_symbol}: ${price:.2f}")
 
-    if target_price > 0:
-        if alert_type == "Above" and price >= target_price:
-            st.error(f"Target reached! Price is ABOVE your target (${target_price})")
-        elif alert_type == "Below" and price <= target_price:
-            st.warning(f"Price has dropped BELOW your target (${target_price})")
+        if target_price > 0:
+            if alert_type == "Above" and price >= target_price:
+                st.error(f"Target reached! Price is ABOVE your target (${target_price})")
+            elif alert_type == "Below" and price <= target_price:
+                st.warning(f"Price has dropped BELOW your target (${target_price})")
 
     data = stock.history(period="1mo")
     st.subheader("Price Chart (1 Month)")
